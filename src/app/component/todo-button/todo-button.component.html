@@ -1,10 +1,11 @@
 <div class="btn-container">
   <ion-button
-    [disabled]="btnStatus === 'loading' || btnStatus === 'wait'"
+    [disabled]="btnStatus === btnState.loading || 
+    btnStatus === btnState.loadedAndDelaying"
     (click)="onStateChange()"
   >
-    {{btnStatus | titlecase}}
-    <span *ngIf="btnStatus === 'wait'" style="margin-left: .5rem;"> {{countDown | number:'2.0-0'}} secs</span>
+    {{btnText | titlecase}}
+    <span *ngIf="btnStatus === btnState.loadedAndDelaying" style="margin-left: .5rem;"> {{countDown | number:'2.0-0'}} secs</span>
   </ion-button>
 </div>
 

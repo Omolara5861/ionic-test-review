@@ -28,6 +28,16 @@ export class TodoButtonComponent implements OnInit {
    */
   btnStatus: BtnState;
 
+  /**
+   *Created a state property of the Button so that it can be referenced in html
+   */
+  btnState = BtnState;
+
+  /**
+   * Btn Text property to change the text of the button depending on the state
+   */
+  btnText: string;
+
   constructor(
     private todosService: TodosService,
   ) {  }
@@ -41,18 +51,25 @@ export class TodoButtonComponent implements OnInit {
     this.btnStatus = val;
     this.statusChange.emit(this.btnStatus);
     switch (this.btnStatus) {
-      case BtnState.loading:
+      case this.btnState.loading:
         this.loadTodos();
+        this.btnText = 'loading';
         break;
 
-      case BtnState.loadedAndDelaying:
+      case this.btnState.loadedAndDelaying:
         this.countDownMethod();
+        this.btnText = 'wait';
         break;
+      case this.btnState.loaded:
+      this.btnText = 'reload';
+      break;
+      case this.btnState.error:
+      this.btnText = 'Load Error.Retry';
     }
   }
 
   ngOnInit() {
-    this.status = BtnState.loading;
+    this.status = this.btnState.loading;
   }
 
   /**
@@ -69,7 +86,7 @@ export class TodoButtonComponent implements OnInit {
       .subscribe(seconds => {
         this.countDown = seconds;
         if(seconds === 0) {
-          this.status = BtnState.loaded;
+          this.status = this.btnState.loaded;
         }
     });
   }
@@ -78,7 +95,7 @@ export class TodoButtonComponent implements OnInit {
    * On click handler for TodoButton
    */
   onStateChange() {
-    this.status = BtnState.loading;
+    this.status = this.btnState.loading;
   }
 
   /**
@@ -89,11 +106,11 @@ export class TodoButtonComponent implements OnInit {
     this.todosService.getTodos()
       .subscribe((res: Todos[]) => {
         this.todosChange.emit(res);
-        this.status = BtnState.loadedAndDelaying;
+        this.status = this.btnState.loadedAndDelaying;
       },
         (error) => {
         this.todosChange.emit([]);
-        this.status = BtnState.error;
+        this.status = this.btnState.error;
       });
   }
 }

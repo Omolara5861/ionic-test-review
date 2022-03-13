@@ -29,7 +29,7 @@ export class TodosService {
    * This is the method for handling all possible errors
    */
   errorHandling(error: HttpErrorResponse) {
-  
+
     if(error.error instanceof ErrorEvent) {
       console.error('An error occured: ', error.error.message);
     }
